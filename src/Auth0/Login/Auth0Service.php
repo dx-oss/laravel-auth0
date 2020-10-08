@@ -174,7 +174,6 @@ class Auth0Service
      */
     public function decodeJWT($encUser, array $verifierOptions = [])
     {
-        $token_issuer = 'https://'.$this->auth0Config['domain'].'/';
         $apiIdentifier = $this->auth0Config['api_identifier'];
         $idTokenAlg = $this->auth0Config['supported_algs'][0] ?? 'RS256';
 
@@ -192,7 +191,7 @@ class Auth0Service
 
         // Use IdTokenVerifier since Auth0-issued JWTs contain the 'sub' claim, which is used by the Laravel user model
         $token_verifier = new TokenVerifier(
-            $token_issuer,
+            $this->auth0Config['authorized_issuers'],
             $apiIdentifier,
             $signature_verifier
         );
